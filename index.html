@@ -10,15 +10,54 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        .subject-group {
+            background-color: #f7fafc; /* ہلکا گرے پس منظر */
+            padding: 20px;
+            border-radius: 0.5rem; /* rounded corners */
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* ہلکا سایہ */
+        }
+        .subject-group label {
+            font-weight: 600; /* نیم بولڈ */
+            color: #4a5568; /* گہرا ٹیکسٹ */
+        }
+        .subject-group input {
+            border: 1px solid #cbd5e0; /* ہلکی بارڈر */
+            border-radius: 0.375rem; /* rounded corners */
+            padding: 0.75rem;
+            width: 100%;
+            box-sizing: border-box;
+            focus: outline-none; /* remove default outline */
+            focus: ring-2; /* add custom focus style */
+            focus: ring-blue-500;
+            focus: border-transparent;
+        }
+        .error-message {
+            color: #e53e3e; /* سرخ رنگ */
+            font-size: 0.75rem;
+            font-style: italic;
+            display: none; /* начальное состояние - скрыто */
+            margin-top: 0.5rem;
+        }
+        .result-card {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* более выраженная тень */
+            margin-top: 2rem;
+        }
+        .download-button {
+            margin-top: 1.5rem;
+        }
     </style>
 </head>
 <body class="bg-gray-100 p-6">
-    <h1 class="text-3xl font-semibold text-center text-blue-600 mb-8">رزلٹ کارڈ جنریٹر</h1>
+    <h1 class="text-3xl font-semibold text-center text-blue-700 mb-8">رزلٹ کارڈ جنریٹر</h1>
 
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="bg-white shadow-md rounded-lg p-6">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">اسٹوڈنٹ کی تفصیلات</h2>
-            <form id="studentForm" class="space-y-4">
+            <form id="studentForm" class="space-y-6">
                 <div>
                     <label for="name" class="block text-gray-700 text-sm font-bold mb-2">نام:</label>
                     <input type="text" id="name" name="name" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -64,10 +103,10 @@
 
         <div class="bg-white shadow-md rounded-lg p-6">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">رزلٹ کارڈ</h2>
-            <div id="resultCard" class="border rounded-md p-4">
+            <div id="resultCard" class="border rounded-md p-4 result-card">
                 <p class="text-gray-500">براہ کرم اسٹوڈنٹ کی تفصیلات اور نمبر درج کریں اور رزلٹ کارڈ بنائیں پر کلک کریں۔</p>
             </div>
-            <button id="downloadPdf" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" style="display: none;">PDF ڈاؤن لوڈ کریں</button>
+            <button id="downloadPdf" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 download-button" style="display: none;">PDF ڈاؤن لوڈ کریں</button>
         </div>
     </div>
 
@@ -170,7 +209,6 @@
             let subjectInputsValid = true;
             document.querySelectorAll('.subject-group').forEach(group => {
                 const subjectNameInput = group.querySelector('.subject-name');
-                const totalMarksInput = group.querySelector('.total-marks');
                 const obtainedMarksInput = group.querySelector('.obtained-marks');
 
                 if (!subjectNameInput.value.trim()) {
@@ -178,13 +216,6 @@
                     subjectInputsValid = false;
                 } else {
                     hideError(subjectNameInput.id);
-                }
-
-                if (!totalMarksInput.value.trim() || isNaN(totalMarksInput.value)) {
-                    showError(totalMarksInput.id, 'درست نمبر درج کریں');
-                    subjectInputsValid = false;
-                } else {
-                    hideError(totalMarksInput.id);
                 }
 
                 if (!obtainedMarksInput.value.trim() || isNaN(obtainedMarksInput.value)) {
@@ -208,24 +239,17 @@
         addSubjectButton.addEventListener('click', () => {
             subjectCount++;
             const subjectDiv = document.createElement('div');
-            subjectDiv.className = 'subject-group space-y-2';
+            subjectDiv.className = 'subject-group space-y-4';
             subjectDiv.innerHTML = `
                 <div>
                     <label for="subjectName${subjectCount}" class="block text-gray-700 text-sm font-bold mb-2">مضمون ${subjectCount}:</label>
                     <input type="text" id="subjectName${subjectCount}" name="subjectName${subjectCount}" required class="subject-name shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <div id="subjectName${subjectCount}-error" class="text-red-500 text-xs italic" style="display: none;"></div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label for="totalMarks${subjectCount}" class="block text-gray-700 text-sm font-bold mb-2">کل نمبر:</label>
-                        <input type="number" id="totalMarks${subjectCount}" name="totalMarks${subjectCount}" required class="total-marks shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                        <div id="totalMarks${subjectCount}-error" class="text-red-500 text-xs italic" style="display: none;"></div>
-                    </div>
-                    <div>
-                        <label for="obtainedMarks${subjectCount}" class="block text-gray-700 text-sm font-bold mb-2">حاصل کردہ نمبر:</label>
-                        <input type="number" id="obtainedMarks${subjectCount}" name="obtainedMarks${subjectCount}" required class="obtained-marks shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                         <div id="obtainedMarks${subjectCount}-error" class="text-red-500 text-xs italic" style="display: none;"></div>
-                    </div>
+                <div>
+                    <label for="obtainedMarks${subjectCount}" class="block text-gray-700 text-sm font-bold mb-2">حاصل کردہ نمبر:</label>
+                    <input type="number" id="obtainedMarks${subjectCount}" name="obtainedMarks${subjectCount}" required class="obtained-marks shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                     <div id="obtainedMarks${subjectCount}-error" class="text-red-500 text-xs italic" style="display: none;"></div>
                 </div>
             `;
             subjectsAndMarksDiv.appendChild(subjectDiv);
@@ -269,16 +293,14 @@
 
                 const subjects = [];
                 let totalObtainedMarks = 0;
-                let totalTotalMarks = 0;
+                const totalTotalMarks = 100 * document.querySelectorAll('.subject-group').length; // Fix total marks to 100 per subject
 
                 document.querySelectorAll('.subject-group').forEach(group => {
                     const subjectName = group.querySelector('.subject-name').value;
-                    const totalMarks = parseInt(group.querySelector('.total-marks').value);
                     const obtainedMarks = parseInt(group.querySelector('.obtained-marks').value);
 
-                    subjects.push({ subjectName, totalMarks, obtainedMarks });
+                    subjects.push({ subjectName, obtainedMarks });
                     totalObtainedMarks += obtainedMarks;
-                    totalTotalMarks += totalMarks;
                 });
 
                 const averageMarks = totalTotalMarks > 0 ? (totalObtainedMarks / totalTotalMarks) * 100 : 0;
@@ -340,16 +362,11 @@
                                 </thead>
                                 <tbody class="bg-white">
                                     ${subjects.map(subject => {
-                                        const percentage = subject.totalMarks > 0 ? (subject.obtainedMarks / subject.totalMarks) * 100 : 0;
+                                        const percentage = (subject.obtainedMarks / 100) * 100; // Calculate percentage based on fixed total marks
                                         let subjectGrade = 'F';
                                          if (percentage >= 80) {
                                             subjectGrade = 'A+';
                                         } else if (percentage >= 70) {
                                             subjectGrade = 'A';
                                         } else if (percentage >= 60) {
-                                            subjectGrade = 'B';
-                                        } else if (percentage >= 50) {
-                                            subjectGrade = 'C';
-                                        } else if (percentage >= 40) {
-                                            subjectGrade = 'D';
-                      
+                                    

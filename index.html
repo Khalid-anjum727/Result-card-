@@ -83,6 +83,7 @@
 
         let subjectCount = 0;
         let schoolLogoDataUrl = ''; // Store the school logo data URL
+        let studentImageDataUrl = '';
 
         // فنکشن: ان پٹ فیلڈ میں غلطی کا پیغام دکھائیں
         function showError(inputElementId, message) {
@@ -244,7 +245,6 @@
             }
         });
 
-
         // ایونٹ لسنر: فارم سبمٹ
         studentForm.addEventListener('submit', (event) => {
             event.preventDefault();
@@ -261,9 +261,11 @@
             const studentImageInput = document.getElementById('studentImage');
             const studentImageFile = studentImageInput.files[0];
 
+
+
             const reader = new FileReader();
             reader.onload = (e) => {
-                const studentImageDataUrl = e.target.result; // Store student image
+                 studentImageDataUrl = e.target.result;
 
                 const subjects = [];
                 let totalObtainedMarks = 0;
@@ -350,4 +352,4 @@
                                             subjectGrade = 'C';
                                         } else if (percentage >= 40) {
                                             subjectGrade = 'D';
-                                 
+                      

@@ -370,4 +370,184 @@
                                             subjectGrade = 'A+';
                                         } else if (percentage >= 70) {
                                             subjectGrade = 'A';
-             
+                                        } else if (percentage >= 60) {
+                                            subjectGrade = 'B';
+                                        } else if (percentage >= 50) {
+                                            subjectGrade = 'C';
+                                        } else if (percentage >= 40) {
+                                            subjectGrade = 'D';
+                                        } else {
+                                            subjectGrade = 'F';
+                                        }
+                                         const result = percentage >= 40 ? 'پاس' : 'فیل';
+                                        return `
+                                            <tr>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">${subject.subjectName}</td>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">100</td>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">${subject.obtainedMarks}</td>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">${percentage.toFixed(2)}%</td>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">${subjectGrade}</td>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">${result}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mb-4 p-4 bg-gray-100 rounded-md">
+                            <p class="text-lg font-semibold">کل نمبر: <span class="text-blue-600">${totalTotalMarks}</span></p>
+                            <p class="text-lg font-semibold">حاصل کردہ نمبر: <span class="text-green-600">${totalObtainedMarks}</span></p>
+                            <p class="text-lg font-semibold">فیصد: <span class="text-purple-600">${averageMarks.toFixed(2)}%</span></p>
+                            <p class="text-lg font-semibold">گریڈ: <span class="text-red-600">${grade}</span></p>
+                             <p class="text-lg font-semibold">نتیجہ: <span class="text-indigo-600">${averageMarks >= 40 ? 'پاس' : 'فیل'}</span></p>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <p style="font-size: 14px; font-weight: bold;">یہ رزلٹ کارڈ کمپیوٹر سے تیار کیا گیا ہے۔</p>
+                        </div>
+                    </div>
+                `;
+                resultCardDiv.innerHTML = resultCardContent;
+                downloadPdfButton.style.display = 'inline-block';
+            }
+
+            if(studentImageFile){
+              reader.readAsDataURL(studentImageFile);
+            }
+            else{
+                 const subjects = [];
+                let totalObtainedMarks = 0;
+                const totalTotalMarks = 100 * document.querySelectorAll('.subject-group').length;
+
+                document.querySelectorAll('.subject-group').forEach(group => {
+                    const subjectName = group.querySelector('.subject-name').value;
+                    const obtainedMarks = parseInt(group.querySelector('.obtained-marks').value);
+
+                    subjects.push({ subjectName, obtainedMarks });
+                    totalObtainedMarks += obtainedMarks;
+                });
+
+                const averageMarks = totalTotalMarks > 0 ? (totalObtainedMarks / totalTotalMarks) * 100 : 0;
+                let grade = 'F';
+                if (averageMarks >= 80) {
+                    grade = 'A+';
+                } else if (averageMarks >= 70) {
+                    grade = 'A';
+                } else if (averageMarks >= 60) {
+                    grade = 'B';
+                } else if (averageMarks >= 50) {
+                    grade = 'C';
+                } else if (averageMarks >= 40) {
+                    grade = 'D';
+                } else {
+                    grade = 'F';
+                }
+
+                const resultCardContent = `
+                    <div class="flex flex-col">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <div class="flex items-center">
+                                ${schoolLogoDataUrl ? `<img src="${schoolLogoDataUrl}" alt="School Logo" style="width: 80px; height: 80px; margin-right: 10px;">` : ''}
+                                <div class="text-left">
+                                    <h2 class="text-xl font-semibold text-gray-800">${schoolName}</h2>
+                                    <p class="text-gray-600 text-sm">اسکول کا پتہ</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <h3 class="text-lg font-semibold text-blue-600">رول نمبر: ${rollNumber}</h3>
+                                <p class="text-gray-600 text-sm">جاری کرنے کی تاریخ: ${new Date().toLocaleDateString('ur-PK')}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex mb-6">
+                            <div class="mr-6">
+                                 <div style="width: 120px; height: 150px; border: 2px solid #ddd; border-radius: 8px; display:flex; justify-content:center; align-items:center; color:#999;">No Photo</div>
+                            </div>
+                            <div class="text-gray-700">
+                                <p><span class="font-semibold">نام:</span> ${name}</p>
+                                <p><span class="font-semibold">والد کا نام:</span> ${fatherName}</p>
+                                <p><span class="font-semibold">کلاس/گروپ:</span> ${classGroup}</p>
+                                 <p><span class="font-semibold">تاریخِ پیدائش:</span> ${dateOfBirth}</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">نمبروں کی تفصیل</h4>
+                            <table class="min-w-full leading-normal shadow-md rounded-lg overflow-hidden">
+                                <thead class="bg-gray-200 text-gray-700">
+                                    <tr>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">مضمون</th>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">کل نمبر</th>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">حاصل کردہ نمبر</th>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">فیصد</th>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">گریڈ</th>
+                                         <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">نتیجہ</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white">
+                                    ${subjects.map(subject => {
+                                        const percentage = (subject.obtainedMarks / 100) * 100;
+                                        let subjectGrade = 'F';
+                                         if (percentage >= 80) {
+                                            subjectGrade = 'A+';
+                                        } else if (percentage >= 70) {
+                                            subjectGrade = 'A';
+                                        } else if (percentage >= 60) {
+                                            subjectGrade = 'B';
+                                        } else if (percentage >= 50) {
+                                            subjectGrade = 'C';
+                                        } else if (percentage >= 40) {
+                                            subjectGrade = 'D';
+                                        } else {
+                                            subjectGrade = 'F';
+                                        }
+                                         const result = percentage >= 40 ? 'پاس' : 'فیل';
+                                        return `
+                                            <tr>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">${subject.subjectName}</td>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">100</td>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">${subject.obtainedMarks}</td>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">${percentage.toFixed(2)}%</td>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">${subjectGrade}</td>
+                                                <td class="px-5 py-5 border-b border-gray-200 text-sm">${result}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mb-4 p-4 bg-gray-100 rounded-md">
+                            <p class="text-lg font-semibold">کل نمبر: <span class="text-blue-600">${totalTotalMarks}</span></p>
+                            <p class="text-lg font-semibold">حاصل کردہ نمبر: <span class="text-green-600">${totalObtainedMarks}</span></p>
+                            <p class="text-lg font-semibold">فیصد: <span class="text-purple-600">${averageMarks.toFixed(2)}%</span></p>
+                            <p class="text-lg font-semibold">گریڈ: <span class="text-red-600">${grade}</span></p>
+                             <p class="text-lg font-semibold">نتیجہ: <span class="text-indigo-600">${averageMarks >= 40 ? 'پاس' : 'فیل'}</span></p>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <p style="font-size: 14px; font-weight: bold;">یہ رزلٹ کارڈ کمپیوٹر سے تیار کیا گیا ہے۔</p>
+                        </div>
+                    </div>
+                `;
+                resultCardDiv.innerHTML = resultCardContent;
+                downloadPdfButton.style.display = 'inline-block';
+            }
+
+
+
+        });
+
+        downloadPdfButton.addEventListener('click', () => {
+            const element = document.getElementById('resultCard');
+            const opt = {
+                margin:       10,
+                filename:     'result-card.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
+        });
+    </script>
+</body>
+</html>

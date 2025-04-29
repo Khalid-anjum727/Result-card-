@@ -11,39 +11,39 @@
             font-family: 'Inter', sans-serif;
         }
         .subject-group {
-            background-color: #f7fafc; /* ہلکا گرے پس منظر */
+            background-color: #f7fafc;
             padding: 20px;
-            border-radius: 0.5rem; /* rounded corners */
+            border-radius: 0.5rem;
             margin-bottom: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* ہلکا سایہ */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         .subject-group label {
-            font-weight: 600; /* نیم بولڈ */
-            color: #4a5568; /* گہرا ٹیکسٹ */
+            font-weight: 600;
+            color: #4a5568;
         }
         .subject-group input {
-            border: 1px solid #cbd5e0; /* ہلکی بارڈر */
-            border-radius: 0.375rem; /* rounded corners */
+            border: 1px solid #cbd5e0;
+            border-radius: 0.375rem;
             padding: 0.75rem;
             width: 100%;
             box-sizing: border-box;
-            focus: outline-none; /* remove default outline */
-            focus: ring-2; /* add custom focus style */
+            focus: outline-none;
+            focus: ring-2;
             focus: ring-blue-500;
             focus: border-transparent;
         }
         .error-message {
-            color: #e53e3e; /* سرخ رنگ */
+            color: #e53e3e;
             font-size: 0.75rem;
             font-style: italic;
-            display: none; /* начальное состояние - скрыто */
+            display: none;
             margin-top: 0.5rem;
         }
         .result-card {
             background-color: #ffffff;
             padding: 2rem;
             border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* более выраженная тень */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             margin-top: 2rem;
         }
         .download-button {
@@ -73,7 +73,7 @@
                     <input type="text" id="classGroup" name="classGroup" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <div id="classGroup-error" class="text-red-500 text-xs italic" style="display: none;"></div>
                 </div>
-                <div>
+                 <div>
                     <label for="fatherName" class="block text-gray-700 text-sm font-bold mb-2">والد کا نام:</label>
                     <input type="text" id="fatherName" name="fatherName" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <div id="fatherName-error" class="text-red-500 text-xs italic" style="display: none;"></div>
@@ -93,9 +93,14 @@
                     <input type="file" id="schoolLogo" name="schoolLogo" accept="image/*" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <div id="schoolLogo-error" class="text-red-500 text-xs italic" style="display: none;"></div>
                 </div>
+                <div>
+                    <label for="schoolName" class="block text-gray-700 text-sm font-bold mb-2">اسکول کا نام:</label>
+                    <input type="text" id="schoolName" name="schoolName" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <div id="schoolName-error" class="text-red-500 text-xs italic" style="display: none;"></div>
+                </div>
                 <div id="subjectsAndMarks" class="space-y-4">
                     <h3 class="text-lg font-semibold text-gray-800">مضامین اور نمبر</h3>
-                    </div>
+                </div>
                 <button type="button" id="addSubject" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">مضمون شامل کریں</button>
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">رزلٹ کارڈ بنائیں</button>
             </form>
@@ -112,7 +117,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script>
-        const studentForm = document.getElementById('studentForm');
+       const studentForm = document.getElementById('studentForm');
         const subjectsAndMarksDiv = document.getElementById('subjectsAndMarks');
         const addSubjectButton = document.getElementById('addSubject');
         const resultCardDiv = document.getElementById('resultCard');
@@ -121,10 +126,9 @@
 
 
         let subjectCount = 0;
-        let schoolLogoDataUrl = ''; // Store the school logo data URL
+        let schoolLogoDataUrl = '';
         let studentImageDataUrl = '';
 
-        // فنکشن: ان پٹ فیلڈ میں غلطی کا پیغام دکھائیں
         function showError(inputElementId, message) {
             const errorElementId = inputElementId + '-error';
             const errorElement = document.getElementById(errorElementId);
@@ -134,17 +138,15 @@
             }
         }
 
-        // فنکشن: ان پٹ فیلڈ سے غلطی کا پیغام چھپائیں
         function hideError(inputElementId) {
             const errorElementId = inputElementId + '-error';
             const errorElement = document.getElementById(errorElementId);
             if (errorElement) {
                 errorElement.style.display = 'none';
-                errorElement.textContent = ''; // Clear message
+                errorElement.textContent = '';
             }
         }
 
-        // فنکشن: فارم ویلیڈیشن چیک کریں
         function validateForm() {
             let isValid = true;
 
@@ -154,7 +156,8 @@
             const fatherNameInput = document.getElementById('fatherName');
             const dateOfBirthInput = document.getElementById('dateOfBirth');
             const studentImageInput = document.getElementById('studentImage');
-            const schoolLogoInput = document.getElementById('schoolLogo');
+             const schoolLogoInput = document.getElementById('schoolLogo');
+             const schoolNameInput = document.getElementById('schoolName');
 
 
             if (!nameInput.value.trim()) {
@@ -177,7 +180,6 @@
             } else {
                 hideError('classGroup');
             }
-
             if (!fatherNameInput.value.trim()) {
                 showError('fatherName', 'والد کا نام درج کریں');
                 isValid = false;
@@ -198,14 +200,19 @@
             } else {
                 hideError('studentImage');
             }
-             if (!schoolLogoInput.files || schoolLogoInput.files.length === 0) {
+            if (!schoolLogoInput.files || schoolLogoInput.files.length === 0) {
                 showError('schoolLogo', 'اسکول کا لوگو اپ لوڈ کریں');
                 isValid = false;
             } else {
                 hideError('schoolLogo');
             }
+            if (!schoolNameInput.value.trim()) {
+                showError('schoolName', 'اسکول کا نام درج کریں');
+                isValid = false;
+            } else {
+                hideError('schoolName');
+            }
 
-            // مضامین اور نمبروں کی ویلیڈیشن
             let subjectInputsValid = true;
             document.querySelectorAll('.subject-group').forEach(group => {
                 const subjectNameInput = group.querySelector('.subject-name');
@@ -233,9 +240,6 @@
             return isValid;
         }
 
-
-
-        // ایونٹ لسنر: مضمون شامل کریں بٹن
         addSubjectButton.addEventListener('click', () => {
             subjectCount++;
             const subjectDiv = document.createElement('div');
@@ -255,13 +259,12 @@
             subjectsAndMarksDiv.appendChild(subjectDiv);
         });
 
-        // ایونٹ لسنر: اسکول لوگو ان پٹ
-        schoolLogoInput.addEventListener('change', (event) => {
+         schoolLogoInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             const reader = new FileReader();
 
             reader.onload = (e) => {
-                schoolLogoDataUrl = e.target.result; // Store the data URL
+                schoolLogoDataUrl = e.target.result;
             };
 
             if (file) {
@@ -269,12 +272,11 @@
             }
         });
 
-        // ایونٹ لسنر: فارم سبمٹ
         studentForm.addEventListener('submit', (event) => {
             event.preventDefault();
 
             if (!validateForm()) {
-                return; // Stop if form is invalid
+                return;
             }
 
             const name = document.getElementById('name').value;
@@ -284,7 +286,7 @@
             const dateOfBirth = document.getElementById('dateOfBirth').value;
             const studentImageInput = document.getElementById('studentImage');
             const studentImageFile = studentImageInput.files[0];
-
+            const schoolName = document.getElementById('schoolName').value;
 
 
             const reader = new FileReader();
@@ -293,7 +295,7 @@
 
                 const subjects = [];
                 let totalObtainedMarks = 0;
-                const totalTotalMarks = 100 * document.querySelectorAll('.subject-group').length; // Fix total marks to 100 per subject
+                const totalTotalMarks = 100 * document.querySelectorAll('.subject-group').length;
 
                 document.querySelectorAll('.subject-group').forEach(group => {
                     const subjectName = group.querySelector('.subject-name').value;
@@ -325,7 +327,7 @@
                             <div class="flex items-center">
                                 ${schoolLogoDataUrl ? `<img src="${schoolLogoDataUrl}" alt="School Logo" style="width: 80px; height: 80px; margin-right: 10px;">` : ''}
                                 <div class="text-left">
-                                    <h2 class="text-xl font-semibold text-gray-800">اسکول کا نام</h2>
+                                    <h2 class="text-xl font-semibold text-gray-800">${schoolName}</h2>
                                     <p class="text-gray-600 text-sm">اسکول کا پتہ</p>
                                 </div>
                             </div>
@@ -343,7 +345,7 @@
                                 <p><span class="font-semibold">نام:</span> ${name}</p>
                                 <p><span class="font-semibold">والد کا نام:</span> ${fatherName}</p>
                                 <p><span class="font-semibold">کلاس/گروپ:</span> ${classGroup}</p>
-                                <p><span class="font-semibold">تاریخِ پیدائش:</span> ${dateOfBirth}</p>
+                                 <p><span class="font-semibold">تاریخِ پیدائش:</span> ${dateOfBirth}</p>
                             </div>
                         </div>
 
@@ -357,16 +359,15 @@
                                         <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">حاصل کردہ نمبر</th>
                                         <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">فیصد</th>
                                         <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">گریڈ</th>
-                                        <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">نتیجہ</th>
+                                         <th class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold uppercase tracking-wider">نتیجہ</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white">
                                     ${subjects.map(subject => {
-                                        const percentage = (subject.obtainedMarks / 100) * 100; // Calculate percentage based on fixed total marks
+                                        const percentage = (subject.obtainedMarks / 100) * 100;
                                         let subjectGrade = 'F';
                                          if (percentage >= 80) {
                                             subjectGrade = 'A+';
                                         } else if (percentage >= 70) {
                                             subjectGrade = 'A';
-                                        } else if (percentage >= 60) {
-                                    
+             
